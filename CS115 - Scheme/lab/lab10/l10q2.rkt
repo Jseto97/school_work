@@ -1,0 +1,14 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname l10q2) (read-case-sensitive #t) (teachpacks ((lib "taxon.rkt.txt" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "taxon.rkt.txt" "installed-teachpacks")))))
+(define (is-ancestor-of? taxon str)
+  (cond 
+    [(t-modern? taxon) 
+     (cond
+       [(equal? (t-modern-name taxon) str) true]
+       [else false])]
+    [(t-ancient? taxon)
+     (cond
+       [(equal? (t-ancient-name taxon) str) true]
+       [(is-ancestor-of? (t-ancient-left taxon) str) true]
+       [else (is-ancestor-of? (t-ancient-right taxon) str)])]))

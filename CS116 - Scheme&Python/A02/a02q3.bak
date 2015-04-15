@@ -1,0 +1,20 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname a02q3) (read-case-sensitive #t) (teachpacks ((lib "compound.rkt.txt" "installed-teachpacks") (lib "product.rkt.txt" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "compound.rkt.txt" "installed-teachpacks") (lib "product.rkt.txt" "installed-teachpacks")))))
+;;********************************************************************
+;;
+;; CS 116 Assignment 02, Question 3
+;; (build listof listof natural numbers)
+;;
+;;********************************************************************
+
+;; mult-table: nat nat -> (listof (listof nat))
+
+;; Purpose: produces 
+
+;; Examples
+
+(define (mult-table nr nc)
+  (build-list nr (lambda (k) (build-list nc (lambda (x) (* x k))))))
+ 
+(mult-table 2 3)

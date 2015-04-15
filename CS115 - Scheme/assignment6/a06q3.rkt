@@ -1,0 +1,51 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname a06q3) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
+;;
+;;************************************************
+;;
+;; CS 115 Assignment 06, Question 
+;; Tianlu Zhu
+;; (insert element into a list)
+;;
+;;************************************************
+
+;; An association list (al) is either
+;;  empty or
+;;  (cons (list k v) alist), where
+;;       k is a number (the key),
+;;       v is a symbol (the value), and
+;;       alst is an association list
+
+;; constant
+(define zero 0)
+
+;; insert : alst alst nat -> alst
+
+;; Purpose: produces a new association list by inserting a new element (new)
+;; after the nth element in the original association list (alst). n is the (index)
+
+;; Examples for insert
+;; (insert empty (list 3 'v) 0) => (list (list 3 'v))
+;; (insert (list (list 2 'a)) (list 5 'c) 1) => (list (list 2 'a) (list 5 'c))
+;; (insert (list (list 5 'c) (list 3 'v) (list 2 'a) (list 1 'b)) (list 8 'k) 3 )=>
+;;            (list (list 5 'c) (list 3 'v) (list 2 'a) (list 8 'k) (list 1 'b))
+
+(define (insert alst new index)
+  (cond
+    [(empty? alst) (list new)]
+    [(= zero index) (append (list new) alst)]
+    [else (append (list (first alst)) (insert (rest alst) new (sub1 index)))]))
+
+;; Tests for insert
+(check-expect (insert empty (list 3 'v) 0) (list (list 3 'v)))
+(check-expect (insert (list (list 2 'a)) (list 5 'c) 1)
+              (list (list 2 'a) (list 5 'c)))
+(check-expect (insert (list (list 2 'a) (list 3 'v)) (list 5 'c) 1)
+              (list (list 2 'a) (list 5 'c) (list 3 'v)))
+(check-expect (insert (list (list 2 'a) (list 8 'k) (list 3 'v)) (list 5 'c) 2)
+              (list (list 2 'a) (list 8 'k) (list 5 'c) (list 3 'v)))
+(check-expect (insert (list (list 5 'c) (list 3 'v) (list 2 'a) (list 1 'b)) (list 8 'k) 3)
+              (list (list 5 'c) (list 3 'v) (list 2 'a) (list 8 'k) (list 1 'b)))
+(check-expect (insert (list (list 2 'a) (list 3 'v) (list 1 'b) (list 8 'k)) (list 5 'c) 4)
+              (list (list 2 'a) (list 3 'v) (list 1 'b) (list 8 'k) (list 5 'c)))

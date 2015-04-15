@@ -1,0 +1,1 @@
+("5.3" ("02164da7aabb9d7293089af3b6309ef6cce52ad1" . "e07bb5e550e491493f8114dec06b2b6b7a5714e5") (collects #"racket" #"main.rkt") (collects #"errortrace" #"errortrace-key.rkt") (collects #"net" #"url.rkt") #"c:\\users\\tina\\documents\\waterloo\\cs136\\a01\\json.rkt" (collects #"racket" #"lang" #"reader.rkt"))

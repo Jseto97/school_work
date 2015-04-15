@@ -1,0 +1,35 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-advanced-reader.ss" "lang")((modname |a04 tutorial|) (read-case-sensitive #t) (teachpacks ((lib "compound.rkt.txt" "installed-teachpacks") (lib "product.rkt.txt" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #t #t none #f ((lib "compound.rkt.txt" "installed-teachpacks") (lib "product.rkt.txt" "installed-teachpacks")))))
+(define-struct date (day month year))
+;; A date is a structure (make-date d m y) where:
+;;    * d is a nat in the range [1...30]
+;;    * m is a nat in the range [1...12]
+;;    * y is any integer
+
+;; change-the-year: date int -> (void)
+;; Purpose: consumes a date structure (birthday), and an 
+;; integer (new-year), and produces nothing.
+
+;; Effect: Mutates birthday so that its year is equal to new-year.
+
+;; Example
+;; (define date1 (make-date 1 1 1998))
+;; (change-the-year date1 100) => (void)
+;; date1 => (make-date 1 1 100)
+
+(define (change-the-year birthday new-year)
+  (set-date-year! birthday new-year))
+
+;; Tests
+(define date-test (make-date 1 1 0)) ; Testing variable
+
+(check-expect (begin (set! date-test (make-date 4 10 1998))
+                     (change-the-year date-test -3403)
+                     (equal? date-test (make-date 4 10 -3403)))
+              
+              true)
+
+(define (change-year birthdays new-year)
+  (foldr (lambda(birthday alob) (append (list (change-the-year birthday new-year))
+                                        alob)) empty birthdays))

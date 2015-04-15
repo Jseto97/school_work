@@ -1,0 +1,32 @@
+#lang racket
+
+;; power1: Int Nat -> Int
+;;   PRE: true
+;;   POST: produces the value of a to the power of n
+;;   TIME: ???
+(define (power1 a n)
+  (if (zero? n) 1 (* a (power1 a (sub1 n)))))
+
+;; power2: Int Nat -> Int
+;;   PRE: true
+;;   POST: produces the value of a to the power of n
+;;   TIME: ???
+(define (power2 a n)
+  (cond
+    ((= 0 n) 1)
+    ((= 1 n) a)
+    ((even? n) (power2 (sqr a) (quotient n 2)))
+    (else (* a (power2 (sqr a) (quotient n 2))))))
+
+;; power3: Int Nat -> Int
+;;   PRE: true
+;;   POST: produces the value of a to the power of n
+;;   TIME: ???
+(define (power3 a n)
+  (cond
+    ((= 0 n) 1)
+    ((= 1 n) a)
+    ((even? n) (* (power3 a (quotient n 2))
+                  (power3 a (quotient n 2))))
+    (else (* (power3 a (quotient n 2))
+             (power3 a (quotient n 2)) a))))

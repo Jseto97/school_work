@@ -1,0 +1,2 @@
+Copyright 2013 BBM Canada
+Rank,Program,Broadcast Outlet,Weekday,Start,End,Total 2+ AMA(000)

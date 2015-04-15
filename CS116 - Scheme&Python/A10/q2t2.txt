@@ -1,0 +1,3 @@
+Copyright 2013 BBM Canada
+Rank,Program,Broadcast Outlet,Weekday,Start,End,Total 2+ AMA(000)
+1,NCIS,Global Total,.T.....,20:00,21:00,2847

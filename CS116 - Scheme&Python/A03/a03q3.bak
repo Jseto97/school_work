@@ -1,0 +1,31 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname a03q3) (read-case-sensitive #t) (teachpacks ((lib "compound.rkt.txt" "installed-teachpacks") (lib "product.rkt.txt" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "compound.rkt.txt" "installed-teachpacks") (lib "product.rkt.txt" "installed-teachpacks")))))
+;;**************************
+;; Assignment 03 : CS116 W13
+;;**************************
+
+;;----------------  
+;; Question #3
+;;----------------
+
+(define-struct student (id cav passed failed))
+;; A student is a structure (make-student id cav p f)
+;; id is a four digit natural number (student id number)
+;; cav is a number between 0 and 100 (student's cumulative average)
+;; p is a non-negative number (number of credits student passed)
+;; f is a non-negative number (number of credits student failed)
+   
+;;Student definitions for Testing
+;;You may add as necessary
+(define stu1 (make-student 1112 78.5 5 1))
+(define stu2 (make-student 3128 61.6 10 4))
+(define stu3 (make-student 3123 55.3 8 5)) 
+(define stu4 (make-student 4166 82.4 13 1))
+(define stu5 (make-student 3146 89.4 14 0))
+(define stu6 (make-student 3282 50.5 6 6))
+(define stu7 (make-student 1236 60.0 9 5)) 
+(define stu8 (make-student 3116 49.5 0 14))
+(define stu9 (make-student 3252 50.0 8 6))
+(define stu10 (make-student 2536 100.0 9 0)) 
+(define stu11 (make-student 4936 0.0 0 9)) 

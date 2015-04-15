@@ -1,0 +1,12 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname a07q2) (read-case-sensitive #t) (teachpacks ((lib "taxon.rkt.txt" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "taxon.rkt.txt" "installed-teachpacks")))))
+;;Constants for binary arithmetic expressions
+(define bae1 (make-bae '+ 2 3))
+(define left-bae (make-bae '* 2 3))
+(define right-bae (make-bae '- 7 3))
+(define root-bae (make-bae '/ left-bae right-bae))
+
+;; Question 2
+
+(define (multiply-exp m n multexp)

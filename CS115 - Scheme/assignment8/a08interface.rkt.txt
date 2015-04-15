@@ -1,0 +1,118 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname a08interface.rkt) (read-case-sensitive #t) (teachpacks ((lib "compound.rkt.txt" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "compound.rkt.txt" "installed-teachpacks")))))
+
+
+;; *****************************  Question 1 *********************************************
+;; Be sure to add the compound teachpack to your solution files.
+;; Do NOT copy the compound definitions and constants into your solution files, or you 
+;; will lose all correctness marks. 
+
+
+(define (min-elm  elm comp1 comp2)
+  ...)
+
+
+;; *****************************  Question 2 *********************************************
+
+
+
+;; A boolean expression bexp is one of:
+;; a boolean value, or
+;; a boolexp, or
+;; a compexp.
+
+(define-struct boolexp (fn args))
+;; A boolexp is a structure (make-boolexp f a) where
+;; f is either 'and or 'or and
+;; a is a bexplist
+
+(define-struct compexp (fn nl))
+;; A compexp is a structure (make-compexp f n) where
+;; f is a symbol chosen from  '<, '>, and '=
+;; n is a listof two numbers
+
+;; A bexplist is either
+;; empty  or
+;; (cons b blist) where
+;;      b is a (bexp) and
+;;      blist is a bexplist
+
+;; Constants for examples and tests
+
+(define be1 (make-boolexp 'and (list(make-boolexp 'or (list (make-compexp '= (list 115 115 )) false))
+                               (make-boolexp 'or (list (make-compexp '< (list 15 6)) false)))))
+(define be2 (make-boolexp 'or (list true true false)))
+(define be3 (make-compexp '= (list 15 15 )))
+(define be4 (make-boolexp 'and (list (make-compexp '= (list 4 4)) true (make-compexp '< (list 5 6)))))
+(define be5 (make-boolexp 'and (list be1 be2 be3)))
+(define be6 (make-compexp '> (list 15 15 )))
+(define be7 (make-boolexp 'and (list be3 be6 )))
+
+
+
+(define (bl-eval ex)
+  ...)
+
+
+
+;; *****************************  Question 3 *********************************************
+
+;; A leaf-labelled tree llt is one of the following:
+;; empty
+;; (cons l1 l2) where
+;;      l1 is a non-empty llt and
+;;      l2 is a llt
+;; (cons v l) where
+;;      v is a string and
+;;      l is a llt
+
+
+;;Constants for tests and examples
+(define myllt '(("hat" ("cat" "dog" "wow") ("abcba" "Wow" "nice") ("halah" "lol")) ("was saw" "end")))
+(define myllt2 '(("hat" ("cat" "dog" "woww") ("abcbda" "nice") ("hala" "lolo")) ("was see" "end")))
+(define myllt3 '("aaa" ("hat" ("cat" "dog" "woww") ("hala" "baab")) ("was see" "end")))
+(define myllt4 '("xyz" ("hat" ("cat" "dog" "wow") ("abcba" "Wow" "nice") ("halah" "lol")) ("was saw" "end")))
+(define res1 '("wow" "abcba" "halah" "lol" "was saw"))
+
+(define (palindrome-strings sllt)
+  ...)
+
+
+
+;; *****************************  Question 4 *********************************************
+
+(define-struct directory (name contents))
+;; A directory is a structure (make-directory n c) where
+;; n is a symbol (directory name)
+;; c is lof (listof files)
+
+;; A file is either
+;;  a symbol (file name) or
+;;  a directory (make-directory n c) where
+;;  n is a symbol (directory name) and
+;;  c is lof (listof files) 
+
+;; A list of files lof is either
+;; empty    or
+;; (cons f lofd) where
+;; f is a file and
+;; lofd is a lof
+
+;; Constants for examples and tests
+
+(define dir2 (make-directory 'd2 (list 'f6 'f7)))
+(define dir1 (make-directory 'd1 (list 'f4 'f5)))
+(define dir12 (make-directory 'd12 (list 'f16 'f17)))
+(define dir5 (make-directory 'd5 (list 'f14 'f55 dir12 )))
+(define dir1b (make-directory 'd1 (list 'f4 'MMM)))
+(define dir5b (make-directory 'd5 (list 'f14 'f55 (make-directory 'MMM (list 'f16 'f17)))))
+
+(define mylof (list 'f1 'f2 dir1 dir2 'f8))
+(define mylof2 (list 'f1 'f2 dir1 dir2 'f8 dir5))
+(define mylof3 (list dir1b dir2 'f1 'f2  'f8 dir5b))
+
+
+
+(define (find-file-lof? fname flist)
+  ...)

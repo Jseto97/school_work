@@ -1,0 +1,6 @@
+#lang racket
+
+;; a wallet is a list where it is either empty or it contains a listof symbols
+
+(define (new-wallet)
+  (

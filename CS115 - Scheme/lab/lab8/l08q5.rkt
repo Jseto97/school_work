@@ -1,0 +1,23 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-reader.ss" "lang")((modname l08q5) (read-case-sensitive #t) (teachpacks ((lib "compound.rkt.txt" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "compound.rkt.txt" "installed-teachpacks")))))
+(define number 2)
+
+(define (check-prime item number)
+  (cond
+    [(= item number) true]
+    [(zero? (remainder item number)) false]
+    [else (check-prime item (add1 number))]))
+(check-expect (check-prime 5 number) true)
+
+(define (largest-prime bottom top)
+  (cond
+    [(= 1 bottom) false]
+    [(check-prime top number) top]
+    [(= top bottom) false]
+    [else (largest-prime bottom (sub1 top))]))
+
+(check-expect (largest-prime 3 5) 5)
+(check-expect (largest-prime 2 2) 2)
+(check-expect (largest-prime 2 46) 43)
+(check-expect (largest-prime 46 46) false)

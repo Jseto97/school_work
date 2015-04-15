@@ -1,0 +1,56 @@
+#lang racket
+  (provide make-single-product single-product-name single-product-origin
+           single-product?
+           make-sales-product sales-product-ID sales-product-prod
+           sales-product?
+           lipbalm lipgloss handlotion shampoo conditioner soap
+           facialscrub 
+           lipbalmpack lipglosspack handlotionpack shampoopack
+           conditionerpack soappack facialscrubpack 
+           lipkit hairkit facekit cleankit
+           promokit allkit bargainkit)
+   
+(define-struct single-product (name origin) #:transparent)
+;; A single-product is a structure (make-single-product n o), where 
+;; n is a string and o is a string denoting the country of origin.
+
+(define-struct sales-product (ID prod) #:transparent)
+;; A sales-product is a structure (make-sales-product i p), where i is an
+;; integer and p is either a single-product or a product-list.
+
+;; A product-list is either empty or it is (cons sp pl),
+;; where sp is a sales-product and pl is a product-list.
+
+;; Sample data for tests
+;; Examples of single-product
+(define lipbalm (make-single-product "lipbalm" "Denmark"))
+(define lipgloss (make-single-product "lipgloss" "Cuba"))
+(define handlotion (make-single-product "hand lotion" "Kenya"))
+(define shampoo (make-single-product "shampoo" "Canada"))
+(define conditioner (make-single-product "conditioner" "New Zealand"))
+(define soap (make-single-product "soap" "Canada"))
+(define facialscrub (make-single-product "facialscrub" "Cuba"))
+
+;; Examples of sales-product, where each prod is a single-product.
+(define lipbalmpack (make-sales-product 123 lipbalm))
+(define lipglosspack (make-sales-product 103 lipgloss))
+(define handlotionpack (make-sales-product 192 handlotion))
+(define shampoopack (make-sales-product 156 shampoo))
+(define conditionerpack (make-sales-product 183 conditioner))
+(define soappack (make-sales-product 134 soap))
+(define facialscrubpack (make-sales-product 122 facialscrub))
+
+;; Examples of sales-product, where some elements of the product-list
+;; are in turn sales-products containing product-lists
+(define lipkit (make-sales-product 342 (list lipbalmpack lipglosspack)))
+(define hairkit (make-sales-product 356 (list shampoopack conditionerpack)))
+(define facekit (make-sales-product 344 (list soappack facialscrubpack)))
+(define cleankit (make-sales-product 399 
+                                     (list soappack shampoopack facialscrubpack)))
+
+;; Examples of sales-product, some elements of prod are lists
+(define promokit (make-sales-product 453 (list lipkit soappack hairkit)))
+(define allkit (make-sales-product 567
+                                   (list lipkit hairkit facekit cleankit)))
+(define bargainkit (make-sales-product 684 (list allkit promokit 
+                                                 handlotionpack lipkit)))

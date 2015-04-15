@@ -1,0 +1,13 @@
+#lang racket
+
+;; list-unique: (listof Int) -> (listof Int)
+;;   PRE: true
+;;   POST: produces a list containing the unique elements of lst
+;;   TIME: ???, n is ???
+(define (list-unique lst)
+  (cond
+    ((empty? lst) empty)
+    (else
+     (define el (first lst))
+     (define el-free-lst (filter (lambda (x) (not (= el x))) (rest lst)))
+     (cons el (list-unique el-free-lst)))))

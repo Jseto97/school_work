@@ -1,0 +1,90 @@
+#include <stdio.h>
+#include <assert.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+struct llnode{
+    int item;
+    struct llnode *next;
+};
+
+int first(struct llnode *lst){
+    assert(lst != NULL);
+    return lst->item;
+}
+
+struct llnode *rest(struct llnode *lst){
+    assert(lst!=NULL);
+    return lst->next;
+}
+
+struct llnode *empty(void){
+    return NULL;
+}
+
+bool is_empty(struct llnode *lst){
+    return lst==empty();
+}
+
+struct llnode *cons(int f, struct llnode *r){
+    struct llnode *new = malloc(sizeof (struct llnode));
+    new->item = f;
+    new->next = r;
+    return new;
+}
+
+struct llnode *sort(struct llnode *lst){
+    if (is_empty(lst)){
+        return empty();
+    } else if (first(lst)<=(first(rest(lst)))){
+        return cons(first(lst), sort(rest(lst)));
+    } else {
+        return cons(first(rest(lst)), sort((cons(first(lst),rest(rest(lst))))));
+    }
+} 
+
+int length(struct llnode *lst){
+    if (is_empty(lst)){
+        return 0;
+    }else {
+        return 1+length(rest(lst));
+    }
+}
+
+int main(){
+    FILE *file;
+    file = fopen("input000.txt", "r");
+    int info = getchar();
+    struct llnode *output = empty();
+    while (info!=EOF){
+        for (int i=0; i<(info-47); i++){
+            struct llnode *input = empty();
+            char in = getchar();
+            int n = in - 48;
+            char kth = getchar();
+            int k = kth - 48;
+            for (int j=0; j<n; j++){
+                char num = getchar();
+                int num_in = num - 48;
+                input = cons(num_in, input);
+            }
+            struct llnode *numbers = sort(input);
+            for (int m=0; m<k; m++){
+                numbers = rest(numbers);
+            }
+            const int l = length(numbers);
+            output = cons(l, output);
+        }
+    }
+    fclose(file);
+    FILE *new_f;
+    new_f = fopen("output000.txt", "w");
+    while (!is_empty(output)){
+        int c = first(output);
+        char ch = c + 48;
+        putc(ch, new_f);
+        output = rest(output);
+    }
+    fclose(new_f);
+}        
+            

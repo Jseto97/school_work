@@ -1,0 +1,2 @@
+Year 	Day 	Month 	Time 	Ambient_Air_Temperature(C)
+2003 	17 	January 	15 	-8.89

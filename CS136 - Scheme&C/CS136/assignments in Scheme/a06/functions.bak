@@ -1,0 +1,53 @@
+#lang racket
+
+;; Step 1. O(1), see below:
+;;      empty?: O(1)
+;;      first:  O(1)
+;;      rest:   O(1)
+;;      +:      O(1)
+;;      O(1) + O(1) + O(1) + O(1) = O(1)
+;; Step 2. n - 1
+;; Step 3. T(n) = O(1) + T(n - 1)
+;; Step 4. T(n) = O(n)
+;;   TIME: O(n), where n is the length of lon
+(define (sum lon)
+  (cond [(empty? lon) 0]
+        [else (+ (first lon) (sum (rest lon)))))
+
+;;   TIME: ???, where n is ???
+(define (my-fun n)
+  (cond
+    ((zero? n) 0)
+    (else (+ (* n n n) (my-fun (sub1 n))))))
+
+;;   TIME: ???, where n is ???
+(define (fib n)
+  (if (< n 2) n (+ (fib (sub1 n)) (fib (- n 2)))))
+
+;;   TIME: ???, where n is ???
+(define (median-fast lon)
+  (define sorted (sort lon <))
+  (define len (length sorted))
+  (/ (+ (list-ref sorted (quotient len 2)) 
+        (list-ref sorted (quotient (sub1 len) 2))) 2))
+
+;;   TIME: ???, where n is ???
+(define (median-slow lon)
+  (define (median-slow-helper sorted)
+    (cond
+      ((empty? (rest sorted)) (first sorted))
+      ((empty? (rest (rest sorted))) 
+       (/ (+ (first sorted) (second sorted)) 2))
+      (else (median-slow-helper (drop-right (rest sorted) 1)))))
+  (median-slow-helper (sort lon <)))
+
+;; You can find out about the Tower of Hanoi problem here:
+;; http://en.wikipedia.org/wiki/Tower_of_Hanoi
+;;   TIME: ???, where n is ???
+(define (hanoi disks)
+  (define (hanoi-helper disks a b c)
+    (cond 
+      ((> disks 0) (hanoi-helper (- disks 1) a c b)
+                   (printf "Move a disk from ~a to ~a\n" a b)
+                   (hanoi-helper (- disks 1) c b a))))
+  (hanoi-helper disks 'peg1 'peg2 'peg3))

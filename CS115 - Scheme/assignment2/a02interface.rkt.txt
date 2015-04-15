@@ -1,0 +1,19 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname asst02interface) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ())))
+;; Question 1
+(define (set-alarm day)
+  ...)
+
+;; Question 2
+(define (arith-seq? item1 item2 item3)
+  ...)
+
+;; Question 3
+(define (passing-cs115 assign-mark mid-mark final-mark)
+  ...)
+
+;; Question 4
+(define (mango-order weight packaging method)
+  ...)
+ 

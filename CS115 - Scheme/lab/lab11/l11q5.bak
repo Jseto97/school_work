@@ -1,0 +1,21 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-reader.ss" "lang")((modname l11q5) (read-case-sensitive #t) (teachpacks ((lib "compound.rkt.txt" "installed-teachpacks") (lib "product.rkt.txt" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "compound.rkt.txt" "installed-teachpacks") (lib "product.rkt.txt" "installed-teachpacks")))))
+;; Lab 11, Q5
+(define (element-in-compound elm comp) 
+  (cond
+    [(empty? (compound-pl comp)) 0]
+    [(compound? (part-eoc (first(compound-pl comp))))
+     (+ (* (part-size (first (compound-pl comp)))
+           (element-in-compound elm (part-eoc (first(compound-pl comp)))))
+        (element-in-compound elm
+                             (make-compound (compound-name comp)
+                                            (rest (compound-pl comp)))))]
+    [(equal? elm (part-eoc (first(compound-pl comp))))
+     (+ (part-size (first(compound-pl comp)))
+        (element-in-compound elm
+                             (make-compound (compound-name comp)
+                                            (rest (compound-pl comp)))))]
+    [else (element-in-compound elm
+                             (make-compound (compound-name comp)
+                                            (rest (compound-pl comp))))]))

@@ -1,0 +1,82 @@
+A) draw the stack frame immediately after moo! is printed for the first time
+=========================
+  cow:
+  i: 3
+  return addr: noise:21
+=========================
+  noise:
+  j: 3
+  s: 'c'
+  return addr: barn:26
+=========================
+  barn:
+  k: 3
+  sound : 'c'
+  return addr: farminocci:30
+=========================
+  farminocci:
+  n: 4
+  return addr: main:36
+=========================
+  main:
+  f: 4
+  return addr: OS
+=========================
+
+
+B) draw the stack frame immediately after baaa! is printed for the first time
+=========================
+  sheep:
+  i: 1
+  return addr: noise:21
+=========================
+  noise:
+  j: 1
+  s: 's'
+  return addr: barn:26
+=========================
+  barn:
+  k: 1
+  sound : 's'
+  return addr: farminocci:30
+=========================
+  farminocci:
+  n: 2
+  return addr: pig:12
+=========================
+  pig:
+  i: 2
+  return addr: noise:21
+=========================
+  noise:
+  j: 2
+  s: 'p'
+  return addr: barn:26
+=========================
+  barn:
+  k: 2
+  sound : 'p'
+  return addr: farminocci:30
+=========================
+  farminocci:
+  n: 3
+  return addr: cow:7
+=========================
+
+C) draw the stack frame immediately after oink! is printed for the second time
+
+=========================
+  pig:
+  i: 2
+  return addr: noise:21
+=========================
+  noise:
+  j: 2
+  s: 'p'
+  return addr: barn:26
+=========================
+  barn:
+  k: 2
+  sound : 'p'
+  return addr: farminocci:30
+=========================

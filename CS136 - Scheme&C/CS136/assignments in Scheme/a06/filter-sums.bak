@@ -1,0 +1,18 @@
+#lang racket
+;; filter-sums: (listof Int) -> (listof Int)
+;;    PRE: true
+;;    POST: produces a list containing
+;;    TIME: 
+;;**********************************************************
+;; (filter-sums lon)
+;; Step 1. O(1), see below:
+;;      empty?: O(1)
+;;      first:  O(1)
+;;      rest:   O(1)
+;;      +:      O(1)
+;;      O(1) + O(1) + O(1) + O(1) = O(1)
+;; Step 2. n - 1
+;; Step 3. T(n) = O(1) + T(n - 1)
+;; Step 4. T(n) = O(n)
+;;   TIME: O(n), where n is the length of lon
+;;**********************************************************
