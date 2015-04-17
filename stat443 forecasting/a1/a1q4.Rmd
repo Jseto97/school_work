@@ -1,0 +1,84 @@
+---
+output: word_document
+---
+# Question 4
+### (a) $X_t = 22 - 15t + 0.3t^2 + Z_t$, $Z_t$ is $N(0,50^2)$ iid
+```{r,fig.width = 6, fig.height=3.5}
+z1=rnorm(100,0,50)
+t=1:100
+x1=22-15*t+0.3*t^2+z1
+par(mfcol=c(1,2))
+acf(x1)
+plot(as.ts(x1))
+```
+
+Comment: when h is large, the graph is still highly related to h with a decreasing trend, thus the autocorrelation is dependent on time t. It violates the stationary condition. The parameters of error has a big effect on the points since it has a large variance, but the overall trend is still determined by the quadratic function.
+
+### (b) $X_t = X_{t - 1} + Z_t$, $Z_t$ is $N(0,1)$ iid
+```{r,fig.width = 6, fig.height=3.5}
+z2=rnorm(101,0,1)
+x2=rep(0,101)
+for (t in 2:101) {
+  x2[t] = x2[t-1] + z2[t]
+}
+par(mfcol=c(1,2))
+acf(x2)
+plot(as.ts(x2))
+```
+
+Comment: the graph decreases over h, which violates the stationary condition. Also, the graph actually changes significantly every time we run with different random variable $Z_t$, so the error does affect the plot dramatically.
+
+### (c) $X_t = 22 - 1.5t + 0.01t^2 + 5\sin(2t) + Z_t$, $Z_t$ is $N(0,2^2)$ iid
+```{r,fig.width = 6, fig.height=3.5}
+z3=rnorm(100,0,2)
+t=1:100
+x3=22-1.5*t+0.01*t^2+5*sin(2*t)+z3
+par(mfcol=c(1,2))
+acf(x3)
+plot(as.ts(x3))
+```
+
+Comment: when h is very large, the graph still shows significant ACF value with a decreasing trend, so the stationary condition is violated. The plot of points is mainly determined by the quadratic function, with a little bit effect by the sine function and error term.
+
+### (d) $X_t = \sin(t)$
+```{r,fig.width = 6, fig.height=3.5}
+x4=sin(t)
+par(mfcol=c(1,2))
+acf(x4)
+plot(as.ts(x4))
+```
+
+Comment: the graph shows periodic significant trend, thus violates the stationarity. The plot of points is determined by the sine function.
+
+### (e) $X_t = \sin(t) + Z_t$, $Z_t$ is $N(0,0.5^2)$ iid
+```{r,fig.width = 6, fig.height=3.5}
+z5=rnorm(100,0,0.5)
+x5=sin(t)+z5
+par(mfcol=c(1,2))
+acf(x5)
+plot(as.ts(x5))
+```
+
+Comment: the graph also has a periodic trend with significant values, violtaing stationarity. With the effect of error term $Z_5$, the plot of points look more random than the graph in d, but by definition it is still non-stationary.
+
+### (f) $X_t = \sin(t) + Z_t$, $Z_t$ is $N(0,1)$ iid
+```{r,fig.width = 6, fig.height=3.5}
+z6=rnorm(100,0,1)
+x6=sin(t)+z6
+par(mfcol=c(1,2))
+acf(x6)
+plot(as.ts(x6))
+```
+
+Comment: the graph has only the first few values significant and others looks insignificant and unrelated to h. However, as the error part has variance 1, which will randomize the data that moves at most one unit up or down. Therefore, it looks like a stationary process on the graph, but it is not actually stationary by definition.
+
+### (g) $X_t = \sin(t) + Z_t$, $Z_t$ is $N(0,2^2)$ iid
+```{r,fig.width = 6, fig.height=3.5}
+z7=rnorm(100,0,2)
+x7=sin(t)+z7
+par(mfcol=c(1,2))
+acf(x7)
+plot(as.ts(x7))
+```
+
+Comment: Similar to the last one. This one even has errors with wider variance range, so the graph looks more random and ACF does not depend on h. However, by definition it is not stationary.

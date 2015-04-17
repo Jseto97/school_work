@@ -1,0 +1,126 @@
+### Question 20
+#### a) $\mu = \int_{-4}^2 log(x+5)\, dx = 7log7 - 6 \approx 7.6214$
+We want to make a transformation where $t = \frac{x+4}6$, then $x = 6t-4$, $dx = 6dt$. 
+So the new integral is $\mu = 6\int_0^1 log(6t+1)\, dt$
+```{r}
+set.seed(271)
+t = runif(1000)
+int = log(6*t+1) *6
+mean = mean(int) # estimated value
+variance = var(int)/sqrt(1000) #sample variance
+mean
+c(mean-1.96*variance,mean+1.96*variance) # Confidence Interval
+```
+
+#### b) $\mu = \int_{-\infty}^{\infty} exp(-x^2/2)\ dx = \sqrt{2\pi} \approx 2.50663$
+$\mu = \int_{-\infty}^{\infty} exp(-x^2/2)\ dx = 2\int_0^{\infty} exp(-x^2/2)\ dx$ as $x^2$ is an even function. We take $t = exp(-x)$, then $x = -\ln{t}$, $dx = -\frac{1}t\ dt$.
+```{r}
+t = runif(1000)
+int = 2*exp(-log(t)^2/2)/t
+mean = mean(int) #estimated value
+mean
+variance = var(int)/sqrt(1000) # sample variance
+c(mean-1.96*variance,mean+1.96*variance) # Confidence Interval
+```
+
+### Question 21
+#### a)
+```{r}
+set.seed(271)
+n = 1000000
+u = runif(n)
+cor(u,sqrt(1-u^2)) # it is quite negatively related
+```
+
+#### b)
+```{r}
+u = runif(n)
+su = u^2
+cor(su,sqrt(1-su))
+```
+
+Comparing the two results, we see that both number are negative, and the second number is smaller, showing a stronger negative correlation. As indicated in the way of coding, the first case is about u and $\sqrt{u}$, with some transformation, while the second case is both about u^2 in different functions. Therefore the second case should indicates a stronger correlation.
+
+### Question 22
+#### a) $\mu = \int_0^1 exp(-x^2)\, dx$, using antithetic method
+```{r}
+set.seed(271)
+n = 1000
+## cmc
+x = runif(n)
+g = exp(-x^2)
+meang = mean(g)
+varcmc = var(g)/n
+### antithetic
+u = runif(n/2)
+v = 1-u
+h = (exp(-u^2)+exp(-v^2))/2
+meanh = mean(h)
+varanti = 2*var(h)/n
+meang
+meanh
+varcmc/varanti #efficiency
+```
+Therefore in order to have the same level of accuracy as 1000 anti samples, cmc needs 269492 samples.
+
+#### b) $\mu = \int_0^1 log(1+x)\, dx$, using control variance with $h(x)=\sqrt{x}$
+For control variance with h(x), now we have $\mu = \int_0^1 \log(1+x)-\sqrt{x}\, dx + \int_0^1 \sqrt{x}\,dx = \int_0^1 \log(1+x)-\sqrt{x}\, dx + \frac{2}3 $. We use cmc to estimate the first part.
+```{r}
+## cmc
+x = runif(n)
+g = log(1+x)
+meang = mean(g)
+varcmc = var(g)/n
+## control variance
+u = runif(n)
+v = log(1+u)
+w = sqrt(u)
+y = v-w
+meancv = mean(y) +2/3
+varcv = var(y)/n
+meang
+meancv
+varcmc/varcv
+```
+Therefore in order to get the same level of accracy as cmc using control variance we need 1/19.34066 the number of function evaluations.
+
+#### c)  $\mu = \int_0^1 log(1+x)\, dx$, using optimal control with $h(x)=\sqrt{x}$
+For optimal control variance with h(x), we have $\mu = \int_0^1 \log(1+x)-k\sqrt{x}\, dx + k\int_0^1 \sqrt{x}\,dx$, where k is a constant that minimizes the variance.
+```{r}
+## cmc
+x = runif(n)
+g = log(1+x)
+meang = mean(g)
+varcmc = var(g)/n
+## control variance
+u = runif(n)
+v = log(1+u)
+w = sqrt(u)
+c = cov(v,w)
+k = c/var(w)
+y = v-k*w
+meancv = mean(y)+k*2/3
+varcv = (var(v)+var(w)*k^2-2*k*c)/n
+meang
+meancv
+varcmc/varcv
+```
+To get the same level of accuracy as optimal control variance in this case, cmc needs 82,922 sample function evaluations.
+
+#### e) importance sampling
+Similar to 20 b), we use the same transformation for cmc.
+```{r}
+## cmc
+t = runif(1000)
+g = sqrt(2/pi)*exp(-log(t)^2/2)/t
+mean = mean(g)
+## importance sampling
+u = runif(n)
+x = -log(u)
+h = sqrt(2/pi)*exp(-x^2/2)/exp(-x)
+output = mean(h)
+meang
+output
+
+```
+

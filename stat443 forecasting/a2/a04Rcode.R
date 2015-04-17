@@ -1,0 +1,9 @@
+t=matrix(c(0.7848,-0.324,0.3924,-0.108,-0.324,0.7848,-0.324,0.3924,0.3924,-0.324,0.7848,-0.324,-0.108,0.3924,-0.324,0.7848),nrow=4,ncol=4,byrow=TRUE)
+t
+e=matrix(c(-0.324,0.3924,-0.108,0),nrow=4,ncol=1,byrow=TRUE)
+e
+a=solve(t)%*%e
+a
+o=matrix(c(0,0,0,0),nrow=4,ncol=1,byrow=TRUE)
+an=solve(t)%*%o
+an

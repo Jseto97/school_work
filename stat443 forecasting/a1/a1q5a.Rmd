@@ -1,0 +1,60 @@
+---
+output: html_document
+---
+#Question 5
+
+### a) Fit a seasonal regression model and provide full residual diagnosis
+```{r}
+lightning <- c(109, 5, 0, 0, 0, 0, 4, 12, 0, 18, 51, 103, 23, 19, 0, 0, 0, 0, 18, 3, 12, 12, 24, 812, 15, 1, 248, 0, 0, 0, 0, 21, 365, 29, 217, 806, 0, 12, 0, 0, 38, 0, 0, 0, 0, 108, 56, 369, 155, 11, 51, 0, 0, 75, 0, 4, 14, 47, 609, 856, 80, 285, 0, 4, 0, 0, 12, 1, 10, 9, 298, 481, 108, 1, 0, 0, 121, 0, 3, 38, 50, 927, 757, 209, 6, 5, 0, 1, 0, 0, 0, 25, 39, 153, 249, 519, 1, 0, 0, 1, 0, 0, 0, 1, 66, 22, 573, 224, 191, 38, 16, 0, 1, 3, 2, 33, 119, 487, 103, 48, 145) # read in the data as a vector
+light.all <- ts(lightning, start = c(2001,9), frequency = 12)
+light.train <- ts(lightning[1:114], start = c(2001,9), frequency = 12)
+light.test <- ts(lightning[115:121], start = c(2011,3), frequency = 12)
+month = factor(cycle(light.train)) # as the month is used every year without specific year 
+reg1 = lm(light.train~month)
+summary(reg1)
+```
+The fitted model is: $light.train = 16.000 - 8.2000month2 - 11.889 - 4.333month4 + 45.778month5 + 131.222month6 + 298.889month7 + 470.556month8 + 52.800month9 + 21.700month10 + 15.500month11 - 15.400month12
+
+```{r,fig.height=6,fig.width=6}
+par(mfcol=c(2,2))
+plot(reg1$residuals)
+abline(h=0,lty=2) 
+plot(reg1$fitted, reg1$residuals)
+qqnorm(reg1$residuals) 
+qqline(reg1$residuals) 
+acf(reg1$residuals) 
+```
+
+Comments: The residual plot has many outliers, and fitted vs. residual plot also looks like a linear trend. The Q-Q plot has light tails. The ACF plot looks fine with no significant value after h=0, but we might want to consider refit the model to reduce the large outliers in the plot.
+
+
+### b) Predict the number of lightning strikes in the last 7 months
+```{r}
+PI<-predict.lm(reg1,newdata=data.frame(month=factor(cycle(light.test))), interval="prediction")
+PI
+(light.test>PI[,"lwr"] & light.test<PI[,"upr"]) # see if light.test is in PI
+```
+
+Comments: as the result reveals, we have two test data not in the prediction interval. With the 95% perdiction level we might want to consider refitting the model.
+
+
+### c) Refit the model with log transformation
+```{r,fig.height=6,fig.width=6}
+reg2<-lm(log(light.train+1)~month)
+summary(reg2)
+par(mfcol=c(2,2))
+plot(reg2$residuals)
+abline(h=0,lty=2) 
+plot(reg2$fitted, reg2$residuals)
+qqnorm(reg2$residuals) 
+qqline(reg2$residuals) 
+acf(reg2$residuals) 
+logPI2<-predict.lm(reg2,newdata=data.frame(month=factor(cycle(light.test))), interval="prediction")
+PI2 = exp(logPI2)-1
+light.test>PI2[,"lwr"] & light.test<PI2[,"upr"]
+```
+ 
+Comment: the model looks MUCH BETTER. Residul plots look random with no significant trend as we suppose, and the Q-Q plot looks more like a normal distribution. And the ACF value still shows no relation to the lag h. Most importantly, now we can fit all the test value in the prediction interval.
+
+### d)Compare the fit and performance of the two models. Which, if any, satisfies the fundamental assumptions of a regression model?
+The second model definitely more satisfy the fundamental assumptions of a regression model. It has zero mean errors with normal distribution, and it fits the test value well. 

@@ -1,0 +1,137 @@
+---
+output: html_document
+---
+## Question 3
+### Part a
+```{r,fig.width=3.5,fig.height=3.5}
+# read in the data
+acc.all<-USAccDeaths
+acc.train<-ts(acc.all[1:60],start=c(1973,1),frequency=12) # convert the training set to time series
+acc.test<-ts(acc.all[61:72],start=c(1978,1),frequency=12) # convert the test set to time series
+plot(acc.train)
+```
+
+Comments:
+1. a clear seasonality (frequency= 12 months) can be observed in the plot.
+2. There is a slightly quadratic term in the plot.
+
+### Part b
+```{r,fig.width=8,fig.height=4}
+month<-factor(cycle(acc.train))
+t<-c(1:60)/12
+## first, fit the data with linear function and seasonality
+reg.l<-lm(acc.train~t+month)
+summary(reg.l)
+## Then, fit the data with quadratic function and seasonality
+t2<-t^2
+reg.q<-lm(acc.train~t+t2+month)
+summary(reg.q)
+## Check the adequacy of model by residual plots
+par(mfrow=c(2,2))
+plot(reg.l$residuals,main="linear model")
+qqnorm(reg.l$residuals, main="linear residual Q-Q plot")
+qqline(reg.l$residuals)
+acf(reg.l$residuals,main = "linear ACF plot")
+acf(reg.l$residuals,type="partial",main="linear PACF plot")
+plot(reg.q$residuals, main="quadratic model")
+qqnorm(reg.q$residuals,main="quadratic residual Q-Q plot")
+qqline(reg.q$residuals)
+acf(reg.q$residuals,main="quadratic ACF plot")
+acf(reg.q$residuals,type="partial",main="quadratic PACF plot")
+```
+
+Comment: The residual plot for the linear model seems to have a quadratic term, and the Q-Q plot of the quadratic model looks more like a straight line compared to the linear model. Comparing ACF plots, they both have exponential decay in the first few spike, but the quadratic model also has spikes for lag=7&8. And the PACF is similar, with both linear and quadratic model having a spike at lag=1 and the quadratic model having a slightly significant value at lag=7.
+
+```{r}
+PI1<-predict.lm(reg.l,newdata=data.frame(t=c(61:72)/12,month=factor(cycle(acc.test))),interval="prediction")
+PI2<-predict.lm(reg.q,newdata=data.frame(t=c(61:72)/12,t2=(c(61:72)/12)^2,month=factor(cycle(acc.test))),interval="prediction")
+PI1
+PI2
+(acc.test>PI1[,"lwr"] & acc.test<PI1[,"upr"])
+(acc.test>PI2[,"lwr"] & acc.test<PI2[,"upr"])
+```
+
+Comment: The linear model does not predit so well as there are some values failed to fall in the predicted interval. The quadratic model is relatively better.
+
+```{r}
+press.l<-sum((PI1[,1]-acc.test)^2)
+press.q<-sum((PI2[,1]-acc.test)^2)
+press.l
+press.q
+```
+
+The PRESS value also indicates that quadratic model is the better fit.
+
+### Part c
+```{r,fig.width=8,fig.height=4}
+acc.add<-HoltWinters(acc.train,seasonal="add")
+acc.mult<-HoltWinters(acc.train,seasonal="mult")
+acc.add
+acc.mult
+par(mfcol=c(1,2))
+plot(acc.add,main="H-W smoothing with additive seasonality")
+plot(acc.mult,main="H-W smoothing with multiplicative seasonality")
+acc.add$SSE
+acc.mult$SSE
+```
+
+```{r}
+PI.add<-predict(acc.add,12,prediction.interval=TRUE)
+PI.mult<-predict(acc.mult,12,prediction.interval=TRUE)
+PI.add
+PI.mult
+(acc.test>PI.add[,"lwr"] & acc.test<PI.add[,"upr"])
+(acc.test>PI.mult[,"lwr"] & acc.test<PI.mult[,"upr"])
+```
+
+Comment: The two models both predit the values well, as the forecast values all lie in the prediction interval.
+
+
+```{r}
+press.add<-sum((PI.add[,1]-acc.test)^2)
+press.mult<-sum((PI.mult[,1]-acc.test)^2)
+press.add
+press.mult
+```
+
+Comment: Since the PRESS value for additive model is smaller, it seems to be a better fit.
+
+### Part d
+```{r,fig.height=8,fig.width=12}
+par(mfcol=c(2,3))
+plot(diff(acc.train,lag=12))
+acf(diff(acc.train,lag=12))
+plot(diff(acc.train,differences=2,lag=12))
+acf(diff(acc.train,differences=2,lag=12))
+plot(diff(acc.train,differences=3,lag=12))
+acf(diff(acc.train,differences=3,lag=12))
+# try differencing once with MA model
+df2ma2 = arima(acc.train, order=c(0,1,2),seasonal=list(order=c(0,0,1), period=12),method="ML") 
+par(mfcol=c(2,2))
+res = df2ma2$residuals
+ts.plot(res)
+points(res)
+abline(h=mean(res))
+qqnorm(res) 
+qqline(res)
+acf(res) 
+acf(res, type="partial")
+```
+
+Comment: The residual plots look random. Besides, it has the smallest aic value compared to any other models. So we pick this one to forecast the data.
+
+```{r}
+sarimaPI<-predict(df2ma2,n.head=12,newdata=data.frame(t=c(61:72)/12,month=factor(cycle(acc.test))),interval="prediction",nahead=12)
+sarimaPI
+#(acc.test>sarimaPI[,"lwr"] & acc.test<sarimaPI[,"upr"])
+```
+There is something wrong with the code which we don't really know... It is supposed to be 12 values but we only got 2.
+
+### part e
+The data should be fit into the quadratic model with seasonalities. It has the relatively low value of PRESS compared to any other models we have tried. Therefore, the model and prediction interval for the forecasting data is shown in the following r output:
+```{r}
+summary(reg.q)
+PI2
+(acc.test>PI2[,"lwr"] & acc.test<PI2[,"upr"])
+```
+

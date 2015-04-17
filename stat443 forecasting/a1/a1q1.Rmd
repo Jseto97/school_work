@@ -1,0 +1,40 @@
+---
+output: pdf_document
+---
+# Question 1(c)
+## MA(2) with  $\theta$ = -1
+```{r,fig.width =4, fig.height=4}
+wn = rnorm(102,0,1) #the random values are used in all cases below
+
+mal.neg1 = wn[1:100] - wn[2:101] + wn[3:102]
+acf(mal.neg1)
+```
+
+comment: The autocorrelation value turns to be insignificant when h>3. There is some values of h that seems to have slightly significant autocorrelations but the overall graph does not depend on time t. Therefore, it is a stationary process.
+
+
+## MA(2) with $\theta$ = -0.2
+```{r,fig.width =4, fig.height=4}
+mal.neg0.2 = wn[1:100] - 0.2*wn[2:101] + 0.04*wn[3:102]
+acf(mal.neg0.2)
+```
+
+comment: The autocorrelation value turns to be insignificant quickly as h increases. We can conclude that the autocorrelation value of mal.neg0.2 does not depend on t, thus it is a stationary process.
+
+
+## MA(2) with $\theta$ = 0.5
+```{r,fig.width =4, fig.height=4}
+mal.0.5 = wn[1:100] + 0.5*wn[2:101] + 0.25*wn[3:102]
+acf(mal.0.5)
+```
+
+comment: As h gets larger, ACF values get less significant. While for some h values the ACF value is slightly significant due to the uncertainty of data, the graph in general does not depend on t. Therefore, it is a stationary process.
+
+
+## MA(2) with $\theta$ = 0.9
+```{r,fig.width =4, fig.height=4}
+mal.0.9 = wn[1:100] + 0.9*wn[2:101] + 0.81*wn[3:102]
+acf(mal.0.9)
+```
+
+comment: Same as the third graph. Even though we have some ACF value a little beyond the insignificant boundary, the graph is independent of t in general. Therefore it is a sationary process.

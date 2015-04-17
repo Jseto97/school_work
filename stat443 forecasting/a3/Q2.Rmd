@@ -1,0 +1,61 @@
+---
+output: html_document
+---
+## Question 2
+### Part a
+```{r}
+temp<-read.table("temp.txt")
+temp<-temp[,1]
+alp=c(1:99)/100 #set the alpha vector from 0.01 to 0.99
+pmse=function(v) # function for calculating PMSE
+{
+  p=NULL
+  for (j in 1:99)
+  {
+    al=alp[j]
+    beta=v[1]
+    se=0
+    for (i in 1:(length(v)-1))
+    {
+      xnext=al*v[i]+(1-al)*beta
+      beta=xnext
+      se=se+(xnext-v[i+1])^2
+    }
+    se=se/((length(v))-1)
+    p=c(p,se)
+  }
+  p
+}
+result=pmse(temp)
+result
+```
+
+
+### Part b
+```{r,fig.width=8,fig.height=4}
+par(mfcol=c(1,2))
+plot(alp,result)
+plot(result[40:119])
+```
+
+From the first plot we cannot see which one is the smallest value, but if we chop off the first 40 results, it is clear that the 57th number is the smallest. Therefore the best value for $\alpha$ is 0.57.
+
+### Part c
+```{r}
+temp<-ts(temp)
+temp.ses<-HoltWinters(temp,beta=F,gamma=F)
+temp.ses$alpha
+```
+
+The smallest value is also $\alpha = 0.57$, same as the answer from part b.
+
+### Part d
+```{r}
+temp.des<-HoltWinters(temp,gamma=F)
+temp.des$alpha
+temp.des$beta
+temp.des$SSE/118 # MSE for DES model
+temp.ses$SSE/119 # MSE for SES model
+```
+
+Since MSE from SES model is less than MSE from DES model, thus SES model is better

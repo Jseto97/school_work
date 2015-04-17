@@ -1,0 +1,64 @@
+---
+title: "a4q3"
+output:
+  html_document: default
+  pdf_document:
+    fig_height: 4
+    fig_width: 4
+---
+## Question 3
+### Part a
+```{r,fig.height=4,fig.width=4}
+library("tseries",quietly=T)
+rim<-get.hist.quote(instrument="rim",quote="Close")
+par(mfcol=c(1,1))
+plot(rim,xlab="Time",ylab="Stock Price",main="RIM Stock Price from 2002 to 2014")
+```
+
+Comment: The stock price does not have a constant mean and variance over the time. It variates a lot by the time t, and the stock price looks quite dependent on the previous values in some sense. We can consider some specific trends for a period of time, for example logistic regression from 2009 to 2012.
+
+### Part b
+```{r,fig.height=4,fig.width=4}
+rim<-get.hist.quote(instrument="rim",quote="Close",start="2010-03-17",end="2015-03-16")
+returns<-log(rim/lag(rim,h=-1))
+```
+We have created a new time series of the log stock returns, $i.e. X_t = log(Y_t/Y_{t-1}) = log(Y_t)-log(Y_{t-1})$.
+
+### Part c
+```{r,fig.height=4,fig.width=4}
+plot(returns,xlab="Time",ylab="log stock return",main="RIM Stock Return from 2010 to 2015")
+```
+
+Comment: The stock returns look random with constant mean(0) but the variance is different over time.
+
+### Part d
+```{r,fig.height=9,fig.width=6}
+par(mfcol=c(3,1))
+returns<-as.numeric(returns)
+acf(returns)
+acf(returns^2,main="Series Square of Returns")
+acf(abs(returns),main="Series Absolute Value of Returns")
+```
+
+Comment: There is a little negative spike on lag=1 for the acf graph. There are several spikes on the square of return and absolute value of return ACF plots. Therefore considering a ARCH/GARCH model would be appropriate.
+
+
+
+Comment: The residual looks random with zero mean and constant variance. However the Q-Q plot has quite heavy tails and the plot is not like a straight line. 
+
+### Part f
+```{r}
+returns.garch <- garch(returns, order=c(1,1), trace=F)
+summary(returns.garch)
+plot(returns.garch$residuals,type="l")
+qqnorm(returns.garch$residuals)
+qqline(returns.garch$residuals)
+```
+
+
+### Part g
+```{r}
+library(fGarch,quietly=T)
+nfit = garchFit(returns=~arma(0,1)+garch(1,1),trace=F)
+nfit
+```
